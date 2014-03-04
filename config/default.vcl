@@ -1,3 +1,8 @@
+backend default {
+  .host = "127.0.0.1";
+  .port = "3000";
+}
+
 # Handling of requests that are received from clients.
 # First decide whether or not to lookup data in the cache.
 sub vcl_recv {
