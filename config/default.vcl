@@ -1,6 +1,6 @@
 backend default {
-  .host = "127.0.0.1";
-  .port = "3000";
+  .host = "$(eval "echo \$BACKEND_PORT_${BACKEND_ENV_PORT}_TCP_ADDR")";
+  .port = "${BACKEND_ENV_PORT}";
 }
 
 # Handling of requests that are received from clients.
@@ -74,12 +74,12 @@ sub vcl_fetch {
   if (beresp.status >= 300) {
     # Remove the Set-Cookie header
     remove beresp.http.Set-Cookie;
-    return(pass);
+    return(hit_for_pass);
   }
 
   # Do not cache the object if the backend application does not want us to.
   if (beresp.http.Cache-Control ~ "(no-cache|no-store|private|must-revalidate)") {
-    return(pass);
+    return(hit_for_pass);
   }
 
   # Everything below here should be cached
