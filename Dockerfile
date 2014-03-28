@@ -1,16 +1,43 @@
-FROM stackbrew/ubuntu
-MAINTAINER Tiago Scolari <tscolari@gmail.com>
+# Varnish
+#
+# WEBSITE https://github.com/Zenedith/docker-varnish
+# VERSION 3.0.5
 
-RUN echo "deb http://repo.varnish-cache.org/ubuntu/ $(lsb_release -sc) varnish-3.0" >> /etc/apt/sources.list;\
-    apt-get update
+FROM ubuntu
+MAINTAINER Mateusz Stępniak "zenedith@wp.pl"
 
-RUN apt-get install varnish -y --force-yes && apt-get clean
+# make sure the package repository is up to date
+RUN apt-get update
+RUN apt-get install git pkg-config dpkg-dev autoconf curl make autotools-dev automake libtool libpcre3-dev libncurses-dev python-docutils bsdmainutils debhelper dh-apparmor gettext gettext-base groff-base html2text intltool-debian libbsd-dev libbsd0 libcroco3 libedit-dev libedit2 libgettextpo0 libpipeline1 libunistring0 man-db po-debconf xsltproc -y
+
+# download repo key
+RUN curl http://repo.varnish-cache.org/debian/GPG-key.txt | sudo apt-key add -
+RUN echo "deb http://repo.varnish-cache.org/ubuntu/ $(lsb_release -sc) varnish-3.0" | sudo tee -a /etc/apt/sources.list
+RUN echo "deb-src http://repo.varnish-cache.org/ubuntu/ $(lsb_release -sc) varnish-3.0" | sudo tee -a /etc/apt/sources.list
+
+# update varnish packages
+RUN apt-get update && apt-get clean
+
+# install varnish
+RUN cd /opt && apt-get source varnish=3.0.5-1
+RUN cd /opt/varnish-3.0.5 && ./autogen.sh
+RUN cd /opt/varnish-3.0.5 && ./configure
+RUN cd /opt/varnish-3.0.5 && make -j3
+RUN cd /opt/varnish-3.0.5 && make install
+
+# install varnish libvmod-throttle
+RUN git clone https://github.com/nand2/libvmod-throttle.git /opt/libvmod-throttle
+RUN cd /opt/libvmod-throttle && ./autogen.sh
+RUN cd /opt/libvmod-throttle && ./configure VARNISHSRC=/opt/varnish-3.0.5
+RUN cd /opt/libvmod-throttle && make -j3
+RUN cd /opt/varnish-3.0.5 && make install
 
 ENV LISTEN_ADDR 0.0.0.0
 ENV LISTEN_PORT 80
 ENV TELNET_ADDR 0.0.0.0
 ENV TELNET_PORT 6083
 ENV CACHE_SIZE 25MB
+ENV THROTTLE_LIMIT 150req/30s
 
 ADD config/default.vcl /etc/varnish/default.vcl.source
 ADD bin/run.sh /bin/run.sh
