@@ -30,7 +30,7 @@ RUN git clone https://github.com/nand2/libvmod-throttle.git /opt/libvmod-throttl
 RUN cd /opt/libvmod-throttle && ./autogen.sh
 RUN cd /opt/libvmod-throttle && ./configure VARNISHSRC=/opt/varnish-3.0.5
 RUN cd /opt/libvmod-throttle && make -j3
-RUN cd /opt/varnish-3.0.5 && make install
+RUN cd /opt/libvmod-throttle && make install
 
 ENV LISTEN_ADDR 0.0.0.0
 ENV LISTEN_PORT 80
