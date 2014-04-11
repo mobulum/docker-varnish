@@ -25,6 +25,7 @@ BAKCEND_PORT 80
 TELNET_ADDR 0.0.0.0
 TELNET_PORT 6083
 CACHE_SIZE 25MB
+VCL_FILE /etc/varnish/default.vcl
 ```
 
 ## Building
