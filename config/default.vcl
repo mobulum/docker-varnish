@@ -113,7 +113,7 @@ sub vcl_fetch {
     beresp.http.Set-Cookie ||
     beresp.http.Vary == "*") {
     /*
-    * Mark as "Hit-For-Pass" for the next 2 minutes
+    * Mark as "Hit-For-Pass"
     */
     set beresp.ttl = ${GRACE_TTL};
     return (hit_for_pass);
