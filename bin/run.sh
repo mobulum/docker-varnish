@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Check skipping auto start for varnish
-[ -z "$VARNISH_SKIP_AUTO_START" ] && echo "VARNISH_SKIP_AUTO_START env variable is set so skipping running varnish.." && exit 0;
-
 # Replace variables in the varnish config file
 
 replace_vars() {
