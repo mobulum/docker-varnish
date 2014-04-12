@@ -21,9 +21,9 @@ sub vcl_recv {
   }
 
   if (req.backend.healthy) {
-     set req.grace = 30s;
+     set req.grace = ${GRACE_TTL};
   } else {
-     set req.grace = 1h;
+     set req.grace = ${GRACE_MAX};
   }
 
   if (req.http.Authorization || req.http.Authenticate) {
@@ -95,7 +95,7 @@ sub vcl_pass {
 # backend, or the request to the backend has failed
 sub vcl_fetch {
   # Set the grace time
-  set beresp.grace = 1h;
+  set beresp.grace = ${GRACE_MAX};
 
   # Do not cache the object if the status is not in the 200s
   if (beresp.status >= 300) {
@@ -115,7 +115,7 @@ sub vcl_fetch {
     /*
     * Mark as "Hit-For-Pass" for the next 2 minutes
     */
-    set beresp.ttl = 120 s;
+    set beresp.ttl = ${GRACE_TTL};
     return (hit_for_pass);
   }
 

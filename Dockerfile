@@ -39,6 +39,8 @@ ENV TELNET_PORT 6083
 ENV CACHE_SIZE 25MB
 ENV THROTTLE_LIMIT 150req/30s
 ENV VCL_FILE /etc/varnish/default.vcl
+ENV GRACE_TTL 30s
+ENV GRACE_MAX 1h
 
 ADD config/default.vcl /etc/varnish/default.vcl.source
 ADD bin/run.sh /bin/run.sh
