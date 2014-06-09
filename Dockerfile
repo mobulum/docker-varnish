@@ -11,15 +11,15 @@ RUN apt-get update
 RUN apt-get install git pkg-config dpkg-dev autoconf curl make autotools-dev automake libtool libpcre3-dev libncurses-dev python-docutils bsdmainutils debhelper dh-apparmor gettext gettext-base groff-base html2text intltool-debian libbsd-dev libbsd0 libcroco3 libedit-dev libedit2 libgettextpo0 libpipeline1 libunistring0 man-db po-debconf xsltproc -y
 
 # download repo key
-RUN curl http://repo.varnish-cache.org/debian/GPG-key.txt | sudo apt-key add -
-RUN echo "deb http://repo.varnish-cache.org/ubuntu/ $(lsb_release -sc) varnish-3.0" | sudo tee -a /etc/apt/sources.list
-RUN echo "deb-src http://repo.varnish-cache.org/ubuntu/ $(lsb_release -sc) varnish-3.0" | sudo tee -a /etc/apt/sources.list
+RUN curl -s http://repo.varnish-cache.org/debian/GPG-key.txt | apt-key add -
+RUN echo "deb http://repo.varnish-cache.org/ubuntu/ $(lsb_release -sc) varnish-3.0" | tee -a /etc/apt/sources.list
+RUN echo "deb-src http://repo.varnish-cache.org/ubuntu/ $(lsb_release -sc) varnish-3.0" | tee -a /etc/apt/sources.list
 
 # update varnish packages
 RUN apt-get update && apt-get clean
 
 # install varnish
-RUN cd /opt && apt-get source varnish=3.0.5-1
+RUN cd /opt && apt-get source varnish=3.0.5-2
 RUN cd /opt/varnish-3.0.5 && ./autogen.sh
 RUN cd /opt/varnish-3.0.5 && ./configure
 RUN cd /opt/varnish-3.0.5 && make -j3
