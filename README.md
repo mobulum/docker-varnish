@@ -39,6 +39,47 @@ From sources:
 $ docker build github.com/Zenedith/docker-varnish
 ```
 
+## Fig Dockerenv
+```yml
+varnish:
+  image: avatarnewyork/dockerenv-varnish
+  volumes:
+    - /var/www/sandbox/varnish/etc/varnish:/etc/varnish
+  ports:
+    - "80"
+  links:
+    - sandbox # Your apache instance
+  environment:
+    VCL_FILE: /etc/varnish/default.vcl
+```
+
+### Varnish Config 
+Due to the way varnish works with it's config file, there is no easy way to pass environment variables to it.  People have come up with a work-around: http://stackoverflow.com/questions/21056450/how-to-inject-environment-variables-in-varnish-configuration - and that is actually similar to what our image is doing.  Basically, you'll have 2 files:
+
+```
+/etc/varnish/default.vcl.source
+/etc/varnish/default.vcl
+```
+
+The source file contains any environment variables you want parsed (that are available).  The run command (part of the image) replaces the defined variables in the source file with the environment variable values using sed and outputs it to the .vcl file.  Then it starts varnish and reads the .vcl file.  So you can think of default.vcl.source as a template and the .vcl file as throwaway (as it get's overwritten every startup).
+
+One thing to note is whatever you define in the yml file (VCL_FILE: /etc/varnish/default.vcl) needs a matching .source 
+
+#### Example _default.vcl.source_
+```vcl
+# This is a basic VCL configuration file for varnish.  See the vcl(7)
+# man page for details on VCL syntax and semantics.
+#
+# Default backend definition.  Set this to point to your content
+# server.
+#
+
+backend default {
+  .host = "$PATSANDBOX_1_PORT_80_TCP_ADDR";
+  .port = "$PATSANDBOX_1_PORT_80_TCP_PORT";
+}
+```
+
 MIT License
 -------
 
