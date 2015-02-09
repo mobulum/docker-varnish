@@ -55,6 +55,7 @@ varnish:
     - sandbox # Your apache instance
   environment:
     VCL_FILE: /etc/varnish/default.vcl
+    LISTEN_PORT: 8080
 ```
 
 ### Testing
