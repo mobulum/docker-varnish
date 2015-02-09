@@ -44,6 +44,8 @@ ENV GRACE_MAX 1h
 
 ADD config/default.vcl /etc/varnish/default.vcl.source
 ADD bin/run.sh /bin/run.sh
+ADD bin/reload.sh /bin/reload.sh
+RUN chmod +x /bin/reload.sh
 
 EXPOSE 80
 
