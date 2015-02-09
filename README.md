@@ -40,18 +40,29 @@ $ docker build github.com/Zenedith/docker-varnish
 ```
 
 ## Fig Dockerenv
+* Port 8080 - Listen (Can be anything except port 80 which is reserved on dockerenv)
+* Port 6083 - varnishadm administrative / telnet port (Optional)
+
 ```yml
 varnish:
   image: avatarnewyork/dockerenv-varnish
   volumes:
     - /var/www/sandbox/varnish/etc/varnish:/etc/varnish
   ports:
-    - "80"
+    - "8080"
+    - "6083"
   links:
     - sandbox # Your apache instance
   environment:
     VCL_FILE: /etc/varnish/default.vcl
 ```
+
+### Testing
+Assuming your Listen port is 8080, bring up your host URL in the web broser with the associated docker port.  For example:
+
+`0.0.0.0:49475->8080/tcp`
+
+Then the url would be `http://[host_IP]:49475` - you should see the cached version of the site you have defined in your vcl file.
 
 ### Varnish Config 
 Due to the way varnish works with it's config file, there is no easy way to pass environment variables to it.  People have come up with a work-around: http://stackoverflow.com/questions/21056450/how-to-inject-environment-variables-in-varnish-configuration - and that is actually similar to what our image is doing.  Basically, you'll have 2 files:
@@ -79,6 +90,15 @@ backend default {
   .port = "$PATSANDBOX_1_PORT_80_TCP_PORT";
 }
 ```
+
+### Dynamic Reload
+You can dynamicly reload your vcl file in dockerenv.  To do so, follow these steps:
+
+1. ensure you have exposed port `6083` in your fig file (see above)
+2. ensure your vcl file you want to reload has the exact path: `/etc/varnish/default.vcl`
+3. Next run the dockerenv command: `varnish-reload [PROJECT_NAME]`
+4. Your file has been reloaded if it compiled ok.  You can now re-test.
+
 
 MIT License
 -------
