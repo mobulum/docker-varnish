@@ -100,6 +100,11 @@ You can dynamicly reload your vcl file in dockerenv.  To do so, follow these ste
 3. Next run the dockerenv command: `varnish-reload [PROJECT_NAME]`
 4. Your file has been reloaded if it compiled ok.  You can now re-test.
 
+### Logging
+This container is running varnishncsa and outputting to STDOUT.  In order to view logs run the standard command:
+
+`docker logs projectname_varnish_1`
+
 
 MIT License
 -------
