@@ -42,7 +42,7 @@ ENV VCL_FILE /etc/varnish/default.vcl
 ENV GRACE_TTL 30s
 ENV GRACE_MAX 1h
 
-ADD config/default.vcl /etc/varnish/default.vcl.source
+ADD config/default.vcl.source /etc/varnish/default.vcl.source
 ADD bin/run.sh /bin/run.sh
 
 EXPOSE 80
