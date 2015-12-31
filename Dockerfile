@@ -33,7 +33,7 @@ RUN cd /opt/libvmod-throttle && make -j3
 RUN cd /opt/libvmod-throttle && make install
 
 ENV LISTEN_ADDR 0.0.0.0
-ENV LISTEN_PORT 80
+ENV LISTEN_PORT 8080
 ENV TELNET_ADDR 0.0.0.0
 ENV TELNET_PORT 6083
 ENV CACHE_SIZE 25MB
@@ -44,7 +44,9 @@ ENV GRACE_MAX 1h
 
 ADD config/default.vcl.source /etc/varnish/default.vcl.source
 ADD bin/run.sh /bin/run.sh
+ADD bin/reload.sh /bin/reload.sh
+RUN chmod +x /bin/reload.sh
 
-EXPOSE 80
+EXPOSE 8080
 
 CMD /bin/run.sh
