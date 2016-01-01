@@ -4,10 +4,10 @@ app:
     - "5000:80"
 
 varnish:
-  image: zenedith/varnish:1.0.0-beta
+  image: zenedith/varnish:1.1.0
   ports:
     - "8080:8080"
-    - "6083:6083" a
+    - "6083:6083"
   links:
     - app
   environment:
