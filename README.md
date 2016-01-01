@@ -62,9 +62,10 @@ varnish:
     BACKEND_ENV_PORT: 5000
 ```
 
+Running example using ```docker-compose```
 
 ```
-docker-compose -f docker-compose.yml.example --project-name "varnish-example" up -d
+$ docker-compose -f docker-compose.yml.example --project-name "varnish-example" up -d
 ```
 
 ### Testing
