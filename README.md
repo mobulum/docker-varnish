@@ -3,6 +3,15 @@ docker-varnish
 
 Simple docker varnish image with throttle module.
 
+## History
+
+[History.md](History.md)
+
+## Authors
+
+[AUTHORS](AUTHORS)
+
+
 ## Pulling
 
 ```
@@ -51,7 +60,7 @@ app:
     - "5000:80"
 
 varnish:
-  image: zenedith/varnish:1.0.0-beta
+  image: zenedith/varnish:1.1.0
   ports:
     - "8080:8080"
     - "6083:6083"
