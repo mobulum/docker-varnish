@@ -1,0 +1,15 @@
+app:
+  image: tutum/hello-world
+  ports:
+    - "5000:80"
+
+varnish:
+  image: zenedith/varnish:1.0.0-beta
+  ports:
+    - "8080:8080"
+    - "6083:6083" a
+  links:
+    - app
+  environment:
+    BACKEND_PORT_5000_TCP_ADDR: 172.17.0.1
+    BACKEND_ENV_PORT: 5000

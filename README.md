@@ -12,16 +12,16 @@ $ docker pull zenedith/varnish
 ## Running
 
 ```
-$ docker run -d -e BACKEND_PORT_80_TCP_ADDR=example.com -e BACKEND_ENV_PORT=80 -p 8080:80 zenedith/varnish
+$ docker run -d -e BACKEND_PORT_5000_TCP_ADDR=example.com -e BACKEND_ENV_PORT=5000 -p 8080:8080 zenedith/varnish
 ```
 
 You can pass environmental variables to customize configuration:
 
 ```
 LISTEN_ADDR 0.0.0.0
-LISTEN_PORT 80
-BACKEND_ADDR 0.0.0.0
-BAKCEND_PORT 80
+LISTEN_PORT 8080
+BACKEND_PORT 5000
+BACKEND_PORT_{$BACKEND_PORT}_TCP_ADDR 0.0.0.0
 TELNET_ADDR 0.0.0.0
 TELNET_PORT 6083
 CACHE_SIZE 25MB
@@ -39,41 +39,57 @@ From sources:
 $ docker build github.com/Zenedith/docker-varnish
 ```
 
-## Fig Dockerenv
-* Port 8080 - Listen (Can be anything except port 80 which is reserved on dockerenv)
+## Example: docker-compose.yml, docker-compose.yaml, fig.yml, fig.yaml
+* Port 8080 - Varnish listen port (default)
+* Port 5000 - App listen port (could be anyone)
 * Port 6083 - varnishadm administrative / telnet port (Optional)
 
 ```yml
-varnish:
-  image: avatarnewyork/dockerenv-varnish
-  volumes:
-    - /var/www/sandbox/varnish/etc/varnish:/etc/varnish
+app:
+  image: tutum/hello-world
   ports:
-    - "8080"
-    - "6083"
+    - "5000:80"
+
+varnish:
+  image: zenedith/varnish:1.0.0-beta
+  ports:
+    - "8080:8080"
+    - "6083:6083"
   links:
-    - sandbox # Your apache instance
+    - app
   environment:
-    VCL_FILE: /etc/varnish/default.vcl
-    LISTEN_PORT: 8080
+    BACKEND_PORT_5000_TCP_ADDR: 172.17.0.1
+    BACKEND_ENV_PORT: 5000
+```
+
+
+```
+docker-compose -f docker-compose.yml.example --project-name "varnish-example" up -d
 ```
 
 ### Testing
-Assuming your Listen port is 8080, bring up your host URL in the web broser with the associated docker port.  For example:
+Assuming your Listen port is 8080, bring up your host URL in the web browser with the associated docker port.
+For example:
 
 `0.0.0.0:49475->8080/tcp`
 
 Then the url would be `http://[host_IP]:49475` - you should see the cached version of the site you have defined in your vcl file.
 
 ### Varnish Config 
-Due to the way varnish works with it's config file, there is no easy way to pass environment variables to it.  People have come up with a work-around: http://stackoverflow.com/questions/21056450/how-to-inject-environment-variables-in-varnish-configuration - and that is actually similar to what our image is doing.  Basically, you'll have 2 files:
+Due to the way varnish works with it's config file, there is no easy way to pass environment variables to it.
+People have come up with a work-around:
+http://stackoverflow.com/questions/21056450/how-to-inject-environment-variables-in-varnish-configuration - and that is actually similar to what this image is doing.
+Basically, you'll have 2 files:
 
 ```
 /etc/varnish/default.vcl.source
 /etc/varnish/default.vcl
 ```
 
-The source file contains any environment variables you want parsed (that are available).  The run command (part of the image) replaces the defined variables in the source file with the environment variable values using sed and outputs it to the .vcl file.  Then it starts varnish and reads the .vcl file.  So you can think of default.vcl.source as a template and the .vcl file as throwaway (as it get's overwritten every startup).
+The source file contains any environment variables you want parsed (that are available).
+The run command (part of the image) replaces the defined variables in the source file with the environment
+variable values using sed and outputs it to the .vcl file.  Then it starts varnish and reads the .vcl file.
+So you can think of default.vcl.source as a template and the .vcl file as throwaway (as it get's overwritten every startup).
 
 One thing to note is whatever you define in the yml file (VCL_FILE: /etc/varnish/default.vcl) needs a matching .source 
 
@@ -104,7 +120,7 @@ You can dynamicly reload your vcl file in dockerenv.  To do so, follow these ste
 MIT License
 -------
 
-Copyright (c) 2014 Mateusz Stępniak
+Copyright (c) 2014-2015 Mateusz Stępniak (Zenedith)
 
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
