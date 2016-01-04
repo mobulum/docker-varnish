@@ -1,7 +1,7 @@
 # Varnish
 #
 # WEBSITE https://github.com/Zenedith/docker-varnish
-# VERSION 3.0.5
+# VERSION 1.1.1
 
 FROM ubuntu
 MAINTAINER Mateusz Stępniak "zenedith@wp.pl"
