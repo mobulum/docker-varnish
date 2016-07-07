@@ -48,6 +48,7 @@ RUN mkdir /etc/service/varnish
 ADD bin/run.sh /etc/service/varnish/run
 RUN chown root /etc/service/varnish/run
 RUN chmod +x /etc/service/varnish/run
+RUN chmod 777 /etc/container_environment
 
 # Clean up APT when done
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
