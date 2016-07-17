@@ -1,7 +1,7 @@
 docker-varnish
 ==============
 
-Simple docker varnish image with throttle module forked from mobulum/docker-varnish to replace baseimage to [Phusion's one](https://github.com/phusion/baseimage-docker).
+Simple docker varnish image with throttle module based on [Phusion's baseimage](https://github.com/phusion/baseimage-docker).
 
 ## History
 
