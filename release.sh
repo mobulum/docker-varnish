@@ -32,7 +32,7 @@ function githubRelease() {
   echo
 
   github-release release \
-    --user "Zenedith" \
+    --user "mobulum" \
     --repo "$repo" \
     --tag "$tag" \
     --name "Release $tag" \
