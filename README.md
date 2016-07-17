@@ -15,7 +15,7 @@ Simple docker varnish image with throttle module based on [Phusion's baseimage](
 ## Pulling
 
 ```
-$ docker pull mobulum/docker-varnish
+$ docker pull mobulum/varnish
 ```
 
 ## Running
@@ -45,7 +45,7 @@ GRACE_MAX 1h
 From sources:
 
 ```
-$ docker build github.com/mobulum/docker-varnish
+$ docker build github.com/mobulum/varnish
 ```
 
 ## Example: docker-compose.yml, docker-compose.yaml, fig.yml, fig.yaml
