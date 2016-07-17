@@ -1,9 +1,9 @@
 # Varnish
-#
 # WEBSITE https://github.com/Zenedith/docker-varnish
 # VERSION 1.1.1
 
-FROM ubuntu
+# Use phusion/baseimage as base image
+FROM phusion/baseimage:latest
 MAINTAINER Mateusz Stępniak "zenedith@wp.pl"
 
 # make sure the package repository is up to date
@@ -47,10 +47,21 @@ ENV GRACE_TTL 30s
 ENV GRACE_MAX 1h
 
 ADD config/default.vcl.source /etc/varnish/default.vcl.source
-ADD bin/run.sh /bin/run.sh
-ADD bin/reload.sh /bin/reload.sh
-RUN chmod +x /bin/reload.sh
+
+# Create a runit entry for your app
+RUN mkdir /etc/service/varnish
+ADD bin/reload.sh etc/service/varnish/reload
+ADD bin/run.sh /etc/service/varnish/run
+RUN chown root /etc/service/varnish/reload
+RUN chown root /etc/service/varnish/run
+RUN chmod +x /etc/service/varnish/reload
+RUN chmod +x /etc/service/varnish/run
+RUN chmod 777 /etc/container_environment
+
+# Clean up APT when done
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 EXPOSE 8080
+EXPOSE 6083
 
-CMD /bin/run.sh
+CMD ["/sbin/my_init"]

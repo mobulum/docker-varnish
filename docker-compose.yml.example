@@ -4,7 +4,7 @@ app:
     - "5000:80"
 
 varnish:
-  image: zenedith/varnish:1.1.0
+  image: mobulum/varnish:1.2.0
   ports:
     - "8080:8080"
     - "6083:6083"

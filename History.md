@@ -1,3 +1,9 @@
+1.2.0 / 2016-01-17
+==================
+  * Merged sgonzalezlopez/master branch (https://github.com/mobulum/docker-varnish/pull/6)
+  * Switch to phusion/baseimage base image
+  * Updated Authors.md file
+
 1.1.0 / 2016-01-01
 ==================
 
