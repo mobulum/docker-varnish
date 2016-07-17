@@ -1,7 +1,7 @@
 docker-varnish
 ==============
 
-Simple docker varnish image with throttle module.
+Simple docker varnish image with throttle module forked from mobulum/docker-varnish to replace baseimage to [Phusion's one](https://github.com/phusion/baseimage-docker).
 
 ## History
 
@@ -15,13 +15,13 @@ Simple docker varnish image with throttle module.
 ## Pulling
 
 ```
-$ docker pull zenedith/varnish
+$ docker pull mobulum/docker-varnish
 ```
 
 ## Running
 
 ```
-$ docker run -d -e BACKEND_PORT_5000_TCP_ADDR=example.com -e BACKEND_ENV_PORT=5000 -p 8080:8080 zenedith/varnish
+$ docker run -d -e BACKEND_PORT_5000_TCP_ADDR=example.com -e BACKEND_ENV_PORT=5000 -p 8080:8080 mobulum/varnish
 ```
 
 You can pass environmental variables to customize configuration:
@@ -45,7 +45,7 @@ GRACE_MAX 1h
 From sources:
 
 ```
-$ docker build github.com/Zenedith/docker-varnish
+$ docker build github.com/mobulum/docker-varnish
 ```
 
 ## Example: docker-compose.yml, docker-compose.yaml, fig.yml, fig.yaml
@@ -60,7 +60,7 @@ app:
     - "5000:80"
 
 varnish:
-  image: zenedith/varnish:1.1.0
+  image: mobulum/varnish:1.2.0
   ports:
     - "8080:8080"
     - "6083:6083"
@@ -85,7 +85,7 @@ For example:
 
 Then the url would be `http://[host_IP]:49475` - you should see the cached version of the site you have defined in your vcl file.
 
-### Varnish Config 
+### Varnish Config
 Due to the way varnish works with it's config file, there is no easy way to pass environment variables to it.
 People have come up with a work-around:
 http://stackoverflow.com/questions/21056450/how-to-inject-environment-variables-in-varnish-configuration - and that is actually similar to what this image is doing.
@@ -101,7 +101,7 @@ The run command (part of the image) replaces the defined variables in the source
 variable values using sed and outputs it to the .vcl file.  Then it starts varnish and reads the .vcl file.
 So you can think of default.vcl.source as a template and the .vcl file as throwaway (as it get's overwritten every startup).
 
-One thing to note is whatever you define in the yml file (VCL_FILE: /etc/varnish/default.vcl) needs a matching .source 
+One thing to note is whatever you define in the yml file (VCL_FILE: /etc/varnish/default.vcl) needs a matching .source
 
 #### Example _default.vcl.source_
 ```vcl
@@ -135,7 +135,7 @@ This container is running varnishncsa and outputting to STDOUT.  In order to vie
 MIT License
 -------
 
-Copyright (c) 2014-2015 Mateusz Stępniak (Zenedith)
+Copyright (c) 2014-2016 Mateusz Stępniak (Zenedith)
 
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
