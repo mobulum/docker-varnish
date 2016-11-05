@@ -1,3 +1,11 @@
+1.4.0 / 2016-11-05
+==================
+  * Updated varnish to 3.0.7
+
+1.3.0 / 2016-11-05
+==================
+  * Updated base image
+
 1.2.0 / 2016-01-17
 ==================
   * Merged sgonzalezlopez/master branch (https://github.com/mobulum/docker-varnish/pull/6)

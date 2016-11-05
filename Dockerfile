@@ -1,10 +1,10 @@
 # Varnish
-# WEBSITE https://github.com/Zenedith/docker-varnish
-# VERSION 1.1.1
+# WEBSITE https://github.com/mobulum/docker-varnish
+# VERSION 1.4.0
 
 # Use phusion/baseimage as base image
 FROM phusion/baseimage:latest
-MAINTAINER Mateusz Stępniak "zenedith@wp.pl"
+MAINTAINER Mateusz Stępniak "contact@mobulum.com"
 
 # make sure the package repository is up to date
 RUN apt-get update
@@ -19,16 +19,16 @@ RUN echo "deb-src http://repo.varnish-cache.org/ubuntu/ $(lsb_release -sc) varni
 RUN apt-get update && apt-get clean
 
 # install varnish
-RUN cd /opt && apt-get source varnish=3.0.5-2
-RUN cd /opt/varnish-3.0.5 && ./autogen.sh
-RUN cd /opt/varnish-3.0.5 && ./configure
-RUN cd /opt/varnish-3.0.5 && make -j3
-RUN cd /opt/varnish-3.0.5 && make install
+RUN cd /opt && apt-get source varnish=3.0.7
+RUN cd /opt/varnish-3.0.7 && ./autogen.sh
+RUN cd /opt/varnish-3.0.7 && ./configure
+RUN cd /opt/varnish-3.0.7 && make -j3
+RUN cd /opt/varnish-3.0.7 && make install
 
 # install varnish libvmod-throttle
 RUN git clone https://github.com/nand2/libvmod-throttle.git /opt/libvmod-throttle
 RUN cd /opt/libvmod-throttle && ./autogen.sh
-RUN cd /opt/libvmod-throttle && ./configure VARNISHSRC=/opt/varnish-3.0.5
+RUN cd /opt/libvmod-throttle && ./configure VARNISHSRC=/opt/varnish-3.0.7
 RUN cd /opt/libvmod-throttle && make -j3
 RUN cd /opt/libvmod-throttle && make install
 
